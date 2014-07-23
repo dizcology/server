@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html> 
+<head>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+
+<p id="question">Question</p>
+<p val="choice" id="1">Choice 1</p>
+<p val="choice" id="2">Choice 2</p>
+<button id="submit" type="button">Ready</button>
+
+<script>
+var choice="0";
+
+function update(){
+  $.getJSON("/question",function(data){
+    $("#question").text(data["question"]);
+    $("p[id='1']").text(data["choice 1"]);
+    $("p[id='2']").text(data["choice 2"]);
+    $("p[val='choice']").css("font-wright","normal");
+  });  
+};
+
+$(document).ready(function(){
+  $("p").hide();
+  update();
+  
+  $("p[val='choice']").click(function(){
+    $("#submit").show();
+    $("p[val='choice']").css("font-weight","normal");
+    $(this).css("font-weight","bold");
+    choice=$(this).prop('id');
+  });
+  
+  $("#submit").click(function(){
+    $("p[val='choice']").css("font-weight","normal");
+    
+    if(choice=="0"){
+      $("p").show();
+      $(this).text("Submit");
+    }
+    
+    if(choice!="0"){
+      $.post("/question",choice,null,"text");
+      update();
+    }
+  });
+
+});
+
+ 
+</script>
+</body>
+</html>
